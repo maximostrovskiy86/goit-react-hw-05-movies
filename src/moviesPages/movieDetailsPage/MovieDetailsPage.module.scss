@@ -1,0 +1,22 @@
+.book {
+    display: flex;
+    .description {
+        margin-left: 20px;
+    }
+}
+
+.genres {
+    display: flex;
+    li + li {
+        margin-left: 10px;
+    }
+}
+
+
+.title {
+    font-size: 32px;
+}
+
+.popularity {
+    font-size: 18px;
+}
