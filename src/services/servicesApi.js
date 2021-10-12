@@ -30,11 +30,8 @@ const getMediaMovieCast = async (movieId) => {
 const getMediaMovieReviews = async (movieId) => {
     const response = await axios
         .get(`${BASE_FETCH_URL}/movie/${movieId}/reviews?api_key=${API_KEY}`);
-    console.log('reviews' + response.data)
     return response.data;
 }
-
-
 
 export default {
     fetchGetMediaTrending,

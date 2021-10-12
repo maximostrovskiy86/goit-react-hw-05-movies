@@ -1,24 +1,16 @@
-import {useHistory, useRouteMatch} from "react-router-dom";
+import style from "./BackButton.module.scss";
+import PropTypes from "prop-types";
 
 const BackButton = ({onBack}) => {
-    let history = useHistory();
-    const {url} = useRouteMatch();
-    // console.log(url)
-
-    console.log(url, history)
-
-    // function handleClick() {
-    //     history.push("/movies");
-    //     // history.goBack()
-    //     // history.push(location.state.?from || '/')
-    //
-    // }
-
     return (
-        <button type="button" onClick={onBack}>
-            Go back
+        <button type="button" className={style.button} onClick={onBack}>
+            &lArr; Go back
         </button>
     );
+}
+
+BackButton.propTypes = {
+    onBack: PropTypes.func.isRequired,
 }
 
 export default BackButton;

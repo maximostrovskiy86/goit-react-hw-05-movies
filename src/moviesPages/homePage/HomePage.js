@@ -1,31 +1,37 @@
 import {useState, useEffect} from "react";
-import {NavLink, useRouteMatch} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import moviesApi from "../../services/servicesApi"
 import style from "./HomePage.module.scss";
 import PageHeading from "../../components/PageHeading/PageHeading";
 
 const HomePage = () => {
-    // const {url} = useRouteMatch();
-    // console.log(url)
+    const location = useLocation();
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
-        moviesApi.fetchGetMediaTrending().then(setMovies);
+        moviesApi
+            .fetchGetMediaTrending()
+            .then(setMovies)
+            .catch(error => console.log(error));
     }, []);
-
-    console.log(movies)
-
-    const {results} = movies;
 
     return (
         <>
             <PageHeading text="Trending today"/>
 
-            {results && (
+            {movies.results && (
                 <ul>
-                    {results.map(item => (
+                    {movies.results.map(item => (
                         <li key={item.id} className={style.itemFilm}>
-                            <NavLink to={`/movies/${item.id}`} className={style.itemLink}>{item.title}</NavLink>
+                            <NavLink
+                                to={{
+                                    pathname: `/movies/${item.id}`,
+                                    state: location,
+                                }}
+                                className={style.itemLink}
+                            >
+                                {item.title}
+                            </NavLink>
                         </li>
                     ))}
                 </ul>

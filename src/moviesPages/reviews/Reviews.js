@@ -1,11 +1,12 @@
+import PropTypes from "prop-types";
+
 const Reviews = ({reviews}) => {
     console.log(reviews)
-    const {results} = reviews;
     return (
         <>
-            {results.length > 0 ?
+            {reviews.results.length > 0 ?
                 <ul>
-                    {results.map(item => (
+                    {reviews.results.map(item => (
                         <li key={item.id}>
                             <h4>Author: {item.author}</h4>
                             <p>{item.content}</p>
@@ -14,9 +15,18 @@ const Reviews = ({reviews}) => {
                 </ul>
                 : <p>Not reviews !!!</p>
             }
-
         </>
     );
+}
+
+Reviews.propTypes = {
+    results: PropTypes.shape({
+        cast: PropTypes.arrayOf(PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            author: PropTypes.string.isRequired,
+            content: PropTypes.string.isRequired,
+        }))
+    })
 }
 
 export default Reviews;

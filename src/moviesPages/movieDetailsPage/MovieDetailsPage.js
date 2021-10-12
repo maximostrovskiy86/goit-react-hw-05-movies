@@ -1,38 +1,50 @@
+import {lazy, Suspense} from "react";
+import PropTypes from "prop-types";
 import style from "./MovieDetailsPage.module.scss";
 import queryApi from "../../services/servicesApi";
-import {Route, Link, useParams, useRouteMatch, useHistory, useLocation} from "react-router-dom";
+import noPhoto from "../../images/nophoto.jpeg";
+import {Route, Switch, useParams, useRouteMatch, NavLink} from "react-router-dom";
 import {useState, useEffect} from "react";
-import Cast from "../cast/Cast";
 import BackButton from "../../components/backButton/BackButton";
-import Reviews from "../reviews/Reviews";
+import PageHeading from "../../components/PageHeading/PageHeading";
 
-const MovieDetailsPage = () => {
-    const {url, path} = useRouteMatch();
-    const history = useHistory();
-    const location = useLocation();
+const Cast = lazy(() => import("../cast/Cast.js"));
+const Reviews = lazy(() => import("../reviews/Reviews.js"));
+
+const MovieDetailsPage = ({location, history}) => {
+    const {url} = useRouteMatch();
 
     const [movie, setMovie] = useState(null);
     const [casts, setCast] = useState(null);
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState(null);
+    const [from, setFrom] = useState({});
     const {movieId} = useParams();
 
+    useEffect(() => {
+        if (location.state) {
+            setFrom(location.state)
+        }
+    }, [])
+
     const onBack = () => {
-        history.push(location.state.from);
+        history.push(from || "/");
     };
 
     useEffect(() => {
-        queryApi.getMediaMovieDetails(movieId).then(setMovie);
-        queryApi.getMediaMovieCast(movieId).then(setCast);
-        queryApi.getMediaMovieReviews(movieId).then(setReviews);
+        queryApi.getMediaMovieDetails(movieId).then(setMovie).catch(error => console.log(error));
+        queryApi.getMediaMovieCast(movieId).then(setCast).catch(error => console.log(error));
+        queryApi.getMediaMovieReviews(movieId).then(setReviews).catch(error => console.log(error));
     }, [movieId]);
 
     return (
         <>
+            <PageHeading text="Details movie"/>
             <BackButton onBack={onBack}/>
             <section>
                 {movie && (
                     <div className={style.book}>
-                        <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title}/>
+                        <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}` : noPhoto}
+                             alt={movie.title}/>
                         <div className={style.description}>
                             <h2 className={style.title}>{movie.title}</h2>
                             <p className={style.popularity}>{movie.popularity}</p>
@@ -50,19 +62,33 @@ const MovieDetailsPage = () => {
             </section>
             <section>
                 <p>Additional information</p>
-                <ul>
-                    <li><Link to={`${url}/cast`}>Cast</Link></li>
-                    <li><Link to={`${url}/reviews`}>Reviews</Link></li>
+                <ul className={style.listMore}>
+                    <li><NavLink to={{
+                        pathname: `${url}/cast`,
+                    }}>Cast</NavLink></li>
+                    <li><NavLink to={{
+                        pathname: `${url}/reviews`,
+                    }}>Reviews</NavLink></li>
                 </ul>
+
+                <Suspense fallback={<h2>Загружается...</h2>}>
+                    <Switch>
+                        <Route path={`${url}/cast`} exact>
+                            <Cast casts={casts}/>
+                        </Route>
+                        <Route path={`${url}/reviews`}>
+                            <Reviews reviews={reviews} exact/>
+                        </Route>
+                    </Switch>
+                </Suspense>
             </section>
-            <Route path={`${url}/cast`}>
-                <Cast casts={casts}/>
-            </Route>
-            <Route path={`${url}/reviews`}>
-                <Reviews reviews={reviews}/>
-            </Route>
         </>
     );
+}
+
+MovieDetailsPage.propTypes = {
+    location: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
 }
 
 export default MovieDetailsPage;
