@@ -79,10 +79,6 @@ const MovieDetailsPage = ({location, history}) => {
                         <Route path={`${url}/reviews`}>
                             <Reviews reviews={reviews} exact/>
                         </Route>
-                        {!movie && <Redirect to="/" /> }
-                        {/*<Route path={`${url}/:value`} to="/"component={HomePage}/>*/}
-                        {/*<Route path={`${url}/:value`} to="/"component={HomePage}/>*/}
-                        {/*<Route path="*" component={HomePage} exact/>*/}
                     </Switch>
                 </Suspense>
             </section>

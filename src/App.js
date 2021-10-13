@@ -17,12 +17,9 @@ const App = () => {
                     <Route path="/" exact>
                         <HomePage/>
                     </Route>
-                    {/*<Route path="/movies" component={MoviesPage} exact/>*/}
                     <Route path="/movies" component={MoviesPage} exact/>
-                    <Route path="/movies/:movieId" component={MoviesDetailsPage} exact/>
+                    <Route path="/movies/:movieId" component={MoviesDetailsPage}/>
                     <Redirect to="/"/>
-                    {/*<Route to="/" component={HomePage}/>*/}
-                    {/*<Route render={() => <Redirect to={{pathname: "/"}} />} />*/}
                 </Switch>
             </Suspense>
         </Container>
