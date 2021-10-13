@@ -2,14 +2,17 @@ import style from "./MoviesPage.module.scss";
 import PropTypes from "prop-types";
 import {useState, useEffect} from "react";
 import moviesApi from "../../services/servicesApi";
-import {Link, useRouteMatch} from "react-router-dom";
+import {Link, useLocation, useHistory, useRouteMatch} from "react-router-dom";
 import PageHeading from "../../components/PageHeading/PageHeading";
 import queryString from "query-string";
 
-const MoviesPage = ({location, history}) => {
+const MoviesPage = () => {
     const {url} = useRouteMatch();
     const [query, setQuery] = useState('');
     const [movies, setMovies] = useState([]);
+
+    const location = useLocation();
+    const history = useHistory();
 
     const handleChange = (e) => setQuery(e.target.value);
 

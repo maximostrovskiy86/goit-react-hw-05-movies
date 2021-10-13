@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import style from "./MovieDetailsPage.module.scss";
 import queryApi from "../../services/servicesApi";
 import noPhoto from "../../images/nophoto.jpeg";
-import {Route, Switch, useParams, useRouteMatch, NavLink} from "react-router-dom";
+import {Route, Switch, useParams, useRouteMatch, NavLink, Redirect} from "react-router-dom";
 import {useState, useEffect} from "react";
 import BackButton from "../../components/backButton/BackButton";
 import PageHeading from "../../components/PageHeading/PageHeading";
@@ -79,6 +79,10 @@ const MovieDetailsPage = ({location, history}) => {
                         <Route path={`${url}/reviews`}>
                             <Reviews reviews={reviews} exact/>
                         </Route>
+                        {!movie && <Redirect to="/" /> }
+                        {/*<Route path={`${url}/:value`} to="/"component={HomePage}/>*/}
+                        {/*<Route path={`${url}/:value`} to="/"component={HomePage}/>*/}
+                        {/*<Route path="*" component={HomePage} exact/>*/}
                     </Switch>
                 </Suspense>
             </section>
